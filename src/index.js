@@ -53,7 +53,6 @@ async function getTasks() {
   )
   list.columns = columnlist;
   list.tasks = tasklist;
-  // return snapshot.docs.map(doc => doc.data());
   return list;
 }
 
@@ -110,6 +109,13 @@ class App extends React.Component {
       this.setState({ fetched: true });
       this.setState({ ...this.state, tasks: newState.tasks, columns: newState.columns });
     })
+  }
+
+  checkColumns = (columnId, index, updateTasks) => {
+    const nIntervId = setInterval(function() { putTasks(this.state, columnId, index, updateTasks); }, 300);
+    if (this.state.fetched && typeof this.state.columns[columnId] !== 'undefined') {
+      clearInterval(nIntervId);
+    }
   }
 
   updateTasks = (task, id) => {

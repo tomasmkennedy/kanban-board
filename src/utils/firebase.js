@@ -1,4 +1,5 @@
 import firebase from 'firebase/compat/app';
+import { apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId, measurementId } from './config';
 import { initializeApp } from 'firebase/app';
 import 'firebase/compat/firestore';
 import { doc, setDoc } from 'firebase/firestore';
@@ -17,13 +18,13 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDsQfPeMVQR5AEIhFMJbAGwqnlMglMRZzk",
-    authDomain: "kanban-2f075.firebaseapp.com",
-    projectId: "kanban-2f075",
-    storageBucket: "kanban-2f075.appspot.com",
-    messagingSenderId: "723439223839",
-    appId: "1:723439223839:web:75280d610ac49cb217812a",
-    measurementId: "G-9JRXYLWRN1"
+    apiKey,
+    authDomain,
+    projectId,
+    storageBucket,
+    messagingSenderId,
+    appId,
+    measurementId,
 };
 
 const googleProvider = new GoogleAuthProvider();
@@ -40,6 +41,7 @@ const signInWithGoogle = async () => {
                 authProvider: "google",
                 email: user.email,
             });
+            await addInitialData();
         }
     } catch (err) {
         console.error(err);

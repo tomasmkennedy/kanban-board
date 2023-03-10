@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
 import {
-    auth, registerWithEmailAndPassword, signInWithGoogle,
+    auth, registerWithEmailAndPassword, signInWithGoogle, addInitialData
 } from "./firebase";
 import "./register.css";
 function Register() {
@@ -16,8 +16,14 @@ function Register() {
         registerWithEmailAndPassword(name, email, password);
     };
     useEffect(() => {
-        if (loading) return;
-        if (user) navigate("/home");
+        const checkData = async () => {
+            if (loading) return;
+            if (user) {
+                await addInitialData();
+                navigate("/home");
+            }
+        }
+        checkData().catch(console.error);
     }, [user, loading]);
     return (
         <div className="register">
