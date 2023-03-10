@@ -49,6 +49,21 @@ const signInWithGoogle = async () => {
     }
 };
 
+async function checkInitialData() {
+    const users = collection(db, "users");
+    const userQuery = query(users, where("uid", "==", auth.currentUser.uid));
+    const querySnapshot = await getDocs(userQuery);
+    var docId = null;
+    querySnapshot.forEach((doc) => {
+        docId = doc.id;
+    });
+    try {
+        const columnTest = await getDocs(collection(db, "users", docId, "columns"));
+    } catch {
+        await addInitialData();
+    }
+}
+
 async function addInitialData() {
     const users = collection(db, "users");
     const userQuery = query(users, where("uid", "==", auth.currentUser.uid));
@@ -59,10 +74,10 @@ async function addInitialData() {
     });
     const tasks = initialData.tasks;
     const columns = initialData.columns;
-    const columnTest = await getDocs(collection(db, "users", docId, "columns"));
-    if (columnTest.length == 0) {
-        return;
-    }
+    // const columnTest = await getDocs(collection(db, "users", docId, "columns"));
+    // if (columnTest.length == 0) {
+    //     return;
+    // }
     for (const element in tasks) {
         const task = tasks[element];
         await setDoc(doc(db, "users", docId, "tasks", task.id), {
@@ -133,6 +148,7 @@ export {
     sendPasswordReset,
     logout,
     addInitialData,
+    checkInitialData,
 };
 
 export default firebase;
