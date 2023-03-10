@@ -59,6 +59,10 @@ async function addInitialData() {
     });
     const tasks = initialData.tasks;
     const columns = initialData.columns;
+    const columnTest = await getDocs(collection(db, "users", docId, "columns"));
+    if (columnTest.length == 0) {
+        return;
+    }
     for (const element in tasks) {
         const task = tasks[element];
         await setDoc(doc(db, "users", docId, "tasks", task.id), {
